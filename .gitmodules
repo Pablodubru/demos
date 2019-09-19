@@ -1,0 +1,6 @@
+[submodule "CiA402Device"]
+	path = CiA402Device
+	url = https://github.com/HUMASoft/CiA402Device.git
+[submodule "fcontrol"]
+	path = fcontrol
+	url = https://github.com/munozyanez/fcontrol.git
