@@ -17,6 +17,8 @@ int main(){
     SamplingTime tools;
     tools.SetSamplingTime(dts);
 
+    if (!tilt.getArduino_is_available()) return -1;
+
     for (double t=0; t<6; t+=dts)
     {
         tools.WaitSamplingTime();
@@ -29,10 +31,10 @@ int main(){
     cout << "Sensor started" << endl;
 
 
-    for (double t=0;t<1000;t+=dts){
+    for (double t=0;t<20;t+=dts){
 
-        if (tilt.estimateSensor(incSensor,oriSensor)<0)
-//        if (tilt.readSensor(incSensor,oriSensor)<0)
+//        if (tilt.estimateSensor(incSensor,oriSensor)<0)
+        if (tilt.readSensor(incSensor,oriSensor)<0)
         {
             cout << "Sensor read error !" << endl;
         }
