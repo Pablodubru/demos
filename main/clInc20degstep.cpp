@@ -25,6 +25,7 @@ int main ()
     float incSensor,oriSensor;
 //    sleep(4); //wait for sensor
 
+    ofstream data("/home/humasoft/code/graficas/graficas_demos/data.csv",std::ofstream::out); // /home/humasoft/code/graficas
 
     //Samplinfg time
     double dts=0.02;
@@ -127,16 +128,14 @@ int main ()
 //    vector<double> inc(interval/dts);
 //    for i
 
-    long reps=1;
 
     //TODO go and back to 0 reps times.
     //TODO check why negative values break the control
-    for (long loops = 1*reps; loops > 0 ; loops--)
+    for (long loops = 1; loops > 0 ; loops--)
     {
-        inc=(loops*inc)-inc;
         cout << "Going to: " << inc << endl;
 
-        double interval=10; //in seconds
+        double interval=5; //in seconds
         for (double t=0;t<interval; t+=dts)
         {
             if (tilt.readSensor(incSensor,oriSensor) <0)
@@ -153,7 +152,7 @@ int main ()
             //negative feedback
             ierror = inc - incSensor;
             cout << "ierror " <<  ierror  << ", cs " << cs << ", incSensor " << incSensor <<endl;
-
+            data << t << " , " <<ierror<< " , "<< incSensor <<endl;
 
             //velocity strategy (activate also SetupVelocityMode())
 
@@ -240,6 +239,7 @@ int main ()
     m2.SetVelocity(0);
     m3.SetVelocity(0);
 
+    data.close();
 
 
 
