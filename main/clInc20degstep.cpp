@@ -45,7 +45,7 @@ int main ()
     PIDBlock intcon(0.1,0.05,0,dts);
     double phi,mag,w=1;
 
-
+    data << "Controller PID" << " , " << " 0.1,0.05,0,dts "<< endl;
 
     //m1 setup
     SocketCanPort pm31("can1");
@@ -131,7 +131,7 @@ int main ()
 
     //TODO go and back to 0 reps times.
     //TODO check why negative values break the control
-    for (long loops = 1; loops > 0 ; loops--)
+    for (long loops = 1; loops <=2 ; loops++)
     {
         cout << "Going to: " << inc << endl;
 
@@ -151,8 +151,8 @@ int main ()
 
             //negative feedback
             ierror = inc - incSensor;
-            cout << "ierror " <<  ierror  << ", cs " << cs << ", incSensor " << incSensor <<endl;
-            data << t << " , " <<ierror<< " , "<< incSensor <<endl;
+            cout <<"t: "<< t << ", ierror " <<  ierror  << ", cs " << cs << ", incSensor " << incSensor <<endl;
+            data << t << " , " <<ierror<< " , "<< incSensor << " , "<< ori<<endl;
 
             //velocity strategy (activate also SetupVelocityMode())
 
@@ -230,6 +230,7 @@ int main ()
 
             Ts.WaitSamplingTime();
         }
+        inc=2;
 
     }
 
