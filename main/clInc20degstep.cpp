@@ -111,6 +111,7 @@ int main ()
     double ori=0*M_PI/180; //target orientation
     double da2=2*M_PI/3, da3=4*M_PI/3; //angle shift for tendons 2 and 3
 
+    ori=ori+210;
     //tilt initialization
     for (double t=0; t<6; t+=dts)
     {
@@ -131,9 +132,12 @@ int main ()
 
     //TODO go and back to 0 reps times.
     //TODO check why negative values break the control
-    for (long loops = 1; loops <=2 ; loops++)
+    for (long stops = 2; stops > 0 ; stops--)
     {
-        cout << "Going to: " << inc << endl;
+
+        //ori+=30; //to increment orientation
+        cout << "Going to Inclination: " << inc << "; Orientation: " << ori <<endl;
+
 
         double interval=5; //in seconds
         for (double t=0;t<interval; t+=dts)
@@ -230,11 +234,30 @@ int main ()
 
             Ts.WaitSamplingTime();
         }
-        inc=2;
+
+        m1.SetupPositionMode(1,1);
+        m2.SetupPositionMode(1,1);
+        m3.SetupPositionMode(1,1);
+
+        interval = 5;
+        for (double t=0;t<interval; t+=dts)
+        {
+            m1.SetPosition(0.01);
+            m2.SetPosition(0.01);
+            m3.SetPosition(0.01);
+            cout<<"pos1: "<<m1.GetPosition()<<", "<<"pos2: "<<m2.GetPosition()<<", "<<"pos3: "<<m3.GetPosition()<<endl;
+            Ts.WaitSamplingTime();
+        }
+
+
+        m1.Setup_Velocity_Mode(5);
+        m2.Setup_Velocity_Mode(5);
+        m3.Setup_Velocity_Mode(5);
 
     }
 
 
+    sleep(2);
 
     m1.SetVelocity(0);
     m2.SetVelocity(0);
