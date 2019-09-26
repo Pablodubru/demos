@@ -111,7 +111,7 @@ int main ()
     double ori=0*M_PI/180; //target orientation
     double da2=2*M_PI/3, da3=4*M_PI/3; //angle shift for tendons 2 and 3
 
-    ori=ori+210;
+
     //tilt initialization
     for (double t=0; t<6; t+=dts)
     {
@@ -129,13 +129,14 @@ int main ()
 //    vector<double> inc(interval/dts);
 //    for i
 
+    ori=0;
 
     //TODO go and back to 0 reps times.
     //TODO check why negative values break the control
-    for (long stops = 2; stops > 0 ; stops--)
+    for (long stops = 5; stops > 0 ; stops--)
     {
 
-        //ori+=30; //to increment orientation
+        ori+=M_PI/4; //to increment orientation
         cout << "Going to Inclination: " << inc << "; Orientation: " << ori <<endl;
 
 
@@ -156,7 +157,7 @@ int main ()
             //negative feedback
             ierror = inc - incSensor;
             cout <<"t: "<< t << ", ierror " <<  ierror  << ", cs " << cs << ", incSensor " << incSensor <<endl;
-            data << t << " , " <<ierror<< " , "<< incSensor << " , "<< ori<<endl;
+
 
             //velocity strategy (activate also SetupVelocityMode())
 
@@ -176,7 +177,7 @@ int main ()
             m2.SetVelocity(cs2);
             m3.SetVelocity(cs3);
             //        cout << "cs1 " << cs1 << ", cs2 " << cs2 << ", cs3 " << cs3 <<endl;
-
+            data <<t<<" , "<<inc<<" , "<<incSensor<<" , "<<ori<<" , " << oriSensor<<" , " <<ierror<<" , "<<cs1<<" , "<<cs2<<" , " <<cs3<<" , " <<m1.GetPosition()<<" , " <<m2.GetPosition()<<" , " <<m3.GetPosition()<< endl;
 
             //velocity strategy (activate also SetupVelocityMode())
 
