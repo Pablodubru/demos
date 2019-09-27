@@ -74,9 +74,9 @@ int main ()
    // p.Plot();
 
     // position  [rads]
-//    m31.SetPosition(0);
-//    m32.SetPosition(0);
-//    m33.SetPosition(0);
+    m31.SetPosition(0);
+    m32.SetPosition(0);
+    m33.SetPosition(0);
     sleep(3);
 
 }

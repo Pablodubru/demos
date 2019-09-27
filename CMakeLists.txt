@@ -7,7 +7,7 @@ set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 aux_source_directory(main SRC_LIST)
-aux_source_directory(examples SRC_LIST)
+aux_source_directory(tools SRC_LIST)
 
 
 add_subdirectory(lib)

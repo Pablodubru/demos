@@ -236,9 +236,9 @@ int main ()
             Ts.WaitSamplingTime();
         }
 
-        m1.SetupPositionMode(1,1);
-        m2.SetupPositionMode(1,1);
-        m3.SetupPositionMode(1,1);
+        m1.SetupPositionMode(5);
+        m2.SetupPositionMode(5);
+        m3.SetupPositionMode(5);
 
         interval = 5;
         for (double t=0;t<interval; t+=dts)
