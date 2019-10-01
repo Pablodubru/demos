@@ -14,6 +14,10 @@
 #include "Kinematics.h"
 
 
+// Demo Close loop with Inclination Sensor, steps 20º incl - 0..45º orientation.
+// It requires: -Platform inclination=0
+//              -Reset IMU sensor
+
 
 int main ()
 {
@@ -25,7 +29,7 @@ int main ()
     ofstream data("/home/humasoft/code/graficas/graficas_demos/data.csv",std::ofstream::out); // /home/humasoft/code/graficas
 
     //Samplinfg time
-    double dts=0.02;
+    double dts=0.01;
     SamplingTime Ts(dts);
 
 
