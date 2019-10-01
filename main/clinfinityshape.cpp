@@ -1,3 +1,4 @@
+
 #include <iostream>
 #include <fstream>
 #include "Cia402device.h"
@@ -37,7 +38,7 @@ int main ()
     OnlineSystemIdentification model(numOrder, denOrder, filter, 0.98, 0.8 );
     SystemBlock sys;
     FPDBlock con(1,1,1,dts);
-    PIDBlock intcon(0.1,0.05,0,dts);
+    PIDBlock intcon(1*0.1,5*0.05,0,dts);
     double phi,mag,w=1;
 
     data << "Controller PID" << " , " << " 0.1,0.05,0,dts "<< endl;
@@ -121,7 +122,7 @@ int main ()
     for (long stops = 1; stops > 0 ; stops--)
     {
         // Move orientation forward 45 to 135 deg.
-        for (long ori_up=45 ; ori_up <= 135 ; ori_up+=20)
+        for (long ori_up=45 ; ori_up <= 135 ; ori_up+=5)
         {
             ori=ori_up*M_PI/180;
             inc=20;
@@ -140,7 +141,7 @@ int main ()
 
                 //negative feedback
                 ierror = inc - incSensor;
-                cout <<"t: "<< t << ", ierror " <<  ierror  << ", cs " << cs << ", incSensor " << incSensor <<", oriUP" << ori_up <<", ori" << ori <<endl;
+//                cout <<"t: "<< t << ", ierror " <<  ierror  << ", cs " << cs << ", incSensor " << incSensor <<", oriUP" << ori_up <<", ori" << ori <<endl;
                 //velocity strategy (activate also SetupVelocityMode())
                 ierror= ierror*M_PI/180; //degrees/sec to rad/sec
                 //controller computes control signal
@@ -149,13 +150,13 @@ int main ()
 
                 if (!isnormal(cs)) cs = 0;
 
-                cs1=(cs*cos(ori))/radius;
+                cs1=(cs*cos(ori+da3))/radius;
                 cs2=(cs*cos(ori+da2))/radius;
-                cs3=(cs*cos(ori+da3))/radius;
+                cs3=(cs*cos(ori))/radius;
                 m1.SetVelocity(cs1);
                 m2.SetVelocity(cs2);
                 m3.SetVelocity(cs3);
-                //        cout << "cs1 " << cs1 << ", cs2 " << cs2 << ", cs3 " << cs3 <<endl;
+                cout << "cs1 " << cs1 << ", cs2 " << cs2 << ", cs3 " << cs3 <<endl;
                 data <<t<<" , "<<inc<<" , "<<incSensor<<" , "<<ori<<" , " << oriSensor<<" , " <<ierror<<" , "<<cs1<<" , "<<cs2<<" , " <<cs3<<" , " <<m1.GetPosition()<<" , " <<m2.GetPosition()<<" , " <<m3.GetPosition()<< endl;
 
                 //velocity strategy (activate also SetupVelocityMode())

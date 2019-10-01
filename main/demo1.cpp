@@ -62,7 +62,7 @@ int main(){
     SamplingTime tools;
     tools.SetSamplingTime(dts);
 
-    incli = 0;
+    incli =0;
     orient = 1;
     //for (double k=0; k<2; k++){
     for(double i=0; i<1; i++){
