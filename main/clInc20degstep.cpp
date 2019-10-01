@@ -7,7 +7,6 @@
 
 #include "SerialArduino.h"
 
-
 #include "fcontrol.h"
 #include "IPlot.h"
 #include "OnlineSystemIdentification.h"
@@ -134,8 +133,7 @@ int main ()
     for (long stops = 5; stops > 0 ; stops--)
     {
 
-        ori+=M_PI/4; //to increment orientation
-        cout << "Going to Inclination: " << inc << "; Orientation: " << ori <<endl;
+        cout << "*********************Going to Inclination: " << inc << "; Orientation: " << ori*180/M_PI <<endl;
 
 
         double interval=5; //in seconds
@@ -167,10 +165,16 @@ int main ()
 
             if (!isnormal(cs)) cs = 0;
 
+              // Orientation 0, motor 1
+//            cs1=(cs*cos(ori))/radius;
+//            cs2=(cs*cos(ori+da2))/radius;
+//            cs3=(cs*cos(ori+da3))/radius;
 
-            cs1=(cs*cos(ori))/radius;
+            // Orientation 0, motor 3
+            cs1=(cs*cos(ori+da3))/radius;
             cs2=(cs*cos(ori+da2))/radius;
-            cs3=(cs*cos(ori+da3))/radius;
+            cs3=(cs*cos(ori))/radius;
+
             m1.SetVelocity(cs1);
             m2.SetVelocity(cs2);
             m3.SetVelocity(cs3);
@@ -230,8 +234,7 @@ int main ()
         file << tp3 << ","<< p3 << ","<< cs3  << endl;
 
 */
-
-            Ts.WaitSamplingTime();
+            Ts.WaitSamplingTime();            
         }
 
         m1.SetupPositionMode(5);
@@ -253,6 +256,7 @@ int main ()
         m2.Setup_Velocity_Mode(5);
         m3.Setup_Velocity_Mode(5);
 
+        ori+=M_PI/4; //to increment orientation
     }
 
 

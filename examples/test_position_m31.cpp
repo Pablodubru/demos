@@ -47,7 +47,7 @@ int main ()
     m33.SetupPositionMode(1,1);
 
     // position  [rads]
-    m31.SetPosition(6);
+    m31.SetPosition(0);
     sleep(3);
     m32.SetPosition(6);
     sleep(3);
