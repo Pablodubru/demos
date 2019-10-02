@@ -26,10 +26,10 @@ int main ()
     float incSensor,oriSensor;
 //    sleep(4); //wait for sensor
 
-    ofstream data("/home/humasoft/code/graficas/graficas_demos/data.csv",std::ofstream::out); // /home/humasoft/code/graficas
+    ofstream data("/home/humasoft/code/graficas/graficas_demos/clinc20degs-400g.csv",std::ofstream::out); // /home/humasoft/code/graficas
 
     //Samplinfg time
-    double dts=0.01;
+    double dts=0.02;
     SamplingTime Ts(dts);
 
 
@@ -43,7 +43,7 @@ int main ()
     OnlineSystemIdentification model(numOrder, denOrder, filter, 0.98, 0.8 );
     SystemBlock sys;
     FPDBlock con(1,1,1,dts);
-    PIDBlock intcon(0.1,0.05,0,dts);
+    PIDBlock intcon(0.1,0.01,0,dts);
     double phi,mag,w=1;
 
     data << "Controller PID" << " , " << " 0.1,0.05,0,dts "<< endl;
@@ -109,7 +109,7 @@ int main ()
 
     double inc=20.0; //inclination tendon length
     double incVel;
-    double ori=0*M_PI/180; //target orientation
+    double ori=0*M_PI/3; //target orientation
     double da2=2*M_PI/3, da3=4*M_PI/3; //angle shift for tendons 2 and 3
 
 
@@ -162,7 +162,7 @@ int main ()
             //velocity strategy (activate also SetupVelocityMode())
 
 
-            ierror= ierror*M_PI/180; //degrees/sec to rad/sec
+            ierror= ierror*M_PI/180; //degrees to rad
             //controller computes control signal
             //        cs = ierror > con;
             cs = ierror > intcon;
@@ -260,7 +260,7 @@ int main ()
         m2.Setup_Velocity_Mode(5);
         m3.Setup_Velocity_Mode(5);
 
-        ori+=M_PI/4; //to increment orientation
+        ori+=M_PI/8; //to increment orientation
     }
 
 
