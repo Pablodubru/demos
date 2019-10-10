@@ -25,7 +25,7 @@ int main ()
   float incSensor,oriSensor;
 //    sleep(4); //wait for sensor
 
-  ofstream data("/home/humasoft/code/graficas/graficas_demos/imufb-inc-fo-yes.csv",std::ofstream::out); // /home/humasoft/code/graficas
+  ofstream data("/home/humasoft/code/demos/graficas/imufb-inc-fo-i15-0o90-500g.csv",std::ofstream::out); // /home/humasoft/code/graficas
 
   //Samplinfg time
   double dts=0.02;
@@ -33,7 +33,8 @@ int main ()
 
 
 
-  FPDBlock con(0*0.203244,8.4333447/10,-1.28/10,dts); //(kp,kd,exp,dts)
+  FPDBlock con(0,0.9636125,-0.89,dts); //(kp,kd,exp,dts) 0.0214437
+  FPDBlock reset(con); //Used for control reset
 //  PIDBlock con(0,1,0,dts);
 
  // data << "Controller PID" << " , " << " 0.1,0.05,0,dts "<< endl;
@@ -42,9 +43,9 @@ int main ()
   SocketCanPort pm31("can1");
   CiA402SetupData sd31(2048,24,0.001, 0.144);
   CiA402Device m1 (31, &pm31, &sd31);
-//  m1.Reset();
-//  m1.SwitchOn();
-//  m1.SetupPositionMode(5,5);//set by start-pos
+  m1.Reset();
+  m1.SwitchOn();
+  m1.SetupPositionMode(5,5);//set by start-pos
  // m1.Setup_Velocity_Mode(5);
 
 
@@ -52,18 +53,18 @@ int main ()
   SocketCanPort pm2("can1");
   CiA402SetupData sd32(2048,24,0.001, 0.144);
   CiA402Device m2 (32, &pm2, &sd32);
-//  m2.Reset();
-//  m2.SwitchOn();
-//  m2.SetupPositionMode(5,5);//set by start-pos
+  m2.Reset();
+  m2.SwitchOn();
+  m2.SetupPositionMode(5,5);//set by start-pos
   //m2.Setup_Velocity_Mode(5);
 
   //m3
   SocketCanPort pm3("can1");
   CiA402SetupData sd33(2048,24,0.001, 0.144);
   CiA402Device m3 (33, &pm3, &sd33);
-//  m3.Reset();
-//  m3.SwitchOn();
-//  m3.SetupPositionMode(5,5);//set by start-pos
+  m3.Reset();
+  m3.SwitchOn();
+  m3.SetupPositionMode(5,5);//set by start-pos
 //  m3.Setup_Velocity_Mode(5);
 
 
@@ -104,10 +105,10 @@ int main ()
 
   }
 
-  for (long stops = 1; stops > 0 ; stops--)
+  for (long stops = 5; stops > 0 ; stops--)
   {
 
-      double interval=10; //in seconds
+      double interval=5; //in seconds
       for (double t=0;t<interval; t+=dts)
       {
           if (tilt.readSensor(incSensor,oriSensor) <0)
@@ -144,8 +145,13 @@ int main ()
           Ts.WaitSamplingTime();
       }
 
+      con = FPDBlock(reset); //Reset?
 
-    //ori+=20;
+      ori+=22.5;
+      m1.SetPosition(0);
+      m2.SetPosition(0);
+      m3.SetPosition(0);
+      sleep(4);
   }
   m1.SetPosition(0);
   m2.SetPosition(0);
