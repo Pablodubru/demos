@@ -108,8 +108,8 @@ int main ()
   for (long stops = 5; stops > 0 ; stops--)
   {
 
-      double interval=5; //in seconds
-      for (double t=0;t<interval; t+=dts)
+      double interval=5.025; //in seconds
+      for (double t=0;t<=interval; t+=dts)
       {
           if (tilt.readSensor(incSensor,oriSensor) <0)
           {
@@ -122,7 +122,7 @@ int main ()
           posan2=(lg0-lengths[1])/radius;
           posan3=(lg0-lengths[2])/radius;
           cout << "TARGET: , " << posan1  << " , " << posan2 << " , " << posan3 << endl;
-
+          cout <<"orient: "<<oriSensor<<endl;
           ep1=posan1-m1.GetPosition();
           cs1=ep1 > con1;
           m1.SetVelocity(cs1);
