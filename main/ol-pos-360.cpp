@@ -14,7 +14,7 @@ int main(){
     double incli, orient;
 
     //--sensor--
-    SerialArduino tilt;
+    //SerialArduino tilt;
     float incSensor,oriSensor;
     ofstream graph("/home/humasoft/code/graficas/graficas_demos/ol-pos-360-000g.csv",std::ofstream::out);
 
@@ -63,11 +63,11 @@ int main(){
     SamplingTime Ts;
     Ts.SetSamplingTime(dts);
 
-    incli =10;
+    incli =15;
     orient = 90;
-    //for (double k=0; k<2; k++){
-    for(double i=0; i<1; i++){
-        incli = incli+10;
+    for (double k=0; k<5; k++){
+    //for(double i=0; i<1; i++){
+      //  incli = incli+10;
 
     for(double j=1; j<3500/2; j++){
         orient = orient-0.1;
@@ -82,7 +82,7 @@ int main(){
     m33.SetPosition(targetAngle3);
 
 
-    for (double t=0;t<2*dts;t+=dts)
+    for (double t=0;t<1*dts;t+=dts)
     {
         cout <<"t: "<<t << endl;
         cout <<"target1: "<<targetAngle1;
@@ -92,9 +92,9 @@ int main(){
         cout <<", pos2: "<<m32.GetPosition();
         cout <<", pos3: "<<m33.GetPosition()<<endl;
         cout << "orient: "<<orient<<" incl: "<<incli<<endl;
-        tilt.readSensor(incSensor,oriSensor);
+        //tilt.readSensor(incSensor,oriSensor);
 //        cout << "incli_sen: " << incSensor << " , orient_sen: " << oriSensor << endl;
-        graph << t << " , " << targetAngle1 << " , " << m31.GetPosition() << " , " << targetAngle2 << " , " << m32.GetPosition() << " , " << targetAngle3 << " , " << m33.GetPosition() << " , " << incli << " , " << incSensor << " , " << orient << " , " << oriSensor <<endl;
+       // graph << t << " , " << targetAngle1 << " , " << m31.GetPosition() << " , " << targetAngle2 << " , " << m32.GetPosition() << " , " << targetAngle3 << " , " << m33.GetPosition() << " , " << incli << " , " << incSensor << " , " << orient << " , " << oriSensor <<endl;
 
         Ts.WaitSamplingTime();
 
