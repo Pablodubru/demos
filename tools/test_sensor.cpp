@@ -9,7 +9,7 @@ int main(){
     //--sensor--
     SerialArduino tilt;
     float incSensor,oriSensor;
-    double dts=0.01;
+    double dts=0.1;
     sleep(4); //wait for sensor
     SystemBlock filterSensor(0.09516,0,- 0.9048,1);
 
