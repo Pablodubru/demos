@@ -24,9 +24,9 @@ int main(){
     SocketCanPort pm32("can1");
     SocketCanPort pm33("can1");
 
-    CiA402SetupData sd31(2048,24,0.001, 0.144);
-    CiA402SetupData sd32(2048,24,0.001, 0.144);
-    CiA402SetupData sd33(2048,24,0.001, 0.144);
+    CiA402SetupData sd31(2048,24,0.001, 0.144, 20 );
+    CiA402SetupData sd32(2048,24,0.001, 0.144, 20 );
+    CiA402SetupData sd33(2048,24,0.001, 0.144, 20 );
 
     CiA402Device m31 (31, &pm31, &sd31);
     CiA402Device m32 (32, &pm32, &sd32);

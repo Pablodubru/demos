@@ -22,7 +22,7 @@ int main ()
 {
   //--sensor--
   SerialArduino tilt;
-  float incSensor,oriSensor;
+  double incSensor,oriSensor;
 //    sleep(4); //wait for sensor
 
   ofstream data("/home/humasoft/code/demos/graficas/encoderfb-vel-fo-i15-0o90-500g.csv",std::ofstream::out); // /home/humasoft/code/graficas
@@ -46,7 +46,7 @@ int main ()
 
   //m1 setup
   SocketCanPort pm31("can1");
-  CiA402SetupData sd31(2048,24,0.001, 0.144);
+  CiA402SetupData sd31(2048,24,0.001, 0.144, 20 );
   CiA402Device m1 (31, &pm31, &sd31);
   m1.Reset();
   m1.SwitchOn();
@@ -56,7 +56,7 @@ int main ()
 
   //m2
   SocketCanPort pm2("can1");
-  CiA402SetupData sd32(2048,24,0.001, 0.144);
+  CiA402SetupData sd32(2048,24,0.001, 0.144, 20 );
   CiA402Device m2 (32, &pm2, &sd32);
   m2.Reset();
   m2.SwitchOn();
@@ -65,7 +65,7 @@ int main ()
 
   //m3
   SocketCanPort pm3("can1");
-  CiA402SetupData sd33(2048,24,0.001, 0.144);
+  CiA402SetupData sd33(2048,24,0.001, 0.144, 20 );
   CiA402Device m3 (33, &pm3, &sd33);
   m3.Reset();
   m3.SwitchOn();
