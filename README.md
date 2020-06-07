@@ -17,10 +17,11 @@ Variables:
 Motion types:
 *yes: Two inclinations forward.
 
-Current names:
-imufb-inc-fo-yes
-
-
+Current working demos:
+* imufb-inc-fo-yes
+* encoderfb-fo-yes.cpp
+* ol-pos-360
+* clInc20degstep
 
 
 # dependencies
