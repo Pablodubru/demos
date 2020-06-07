@@ -5,17 +5,17 @@ controlscheme-controller-controlledvariable-motiontype
 
 Name descriptions:
 Schemes:
-*imufb: feedback from imu sensory data.
+* imufb: feedback from imu sensory data.
 
 Controllers:
-*fo: Fractional order controller.
-*io: Integer order controller.
+* fo: Fractional order controller.
+* io: Integer order controller.
 
 Variables:
-*inc: Inclination position control.
+* inc: Inclination position control.
 
 Motion types:
-*yes: Two inclinations forward.
+* yes: Two inclinations forward.
 
 Current working demos:
 * imufb-inc-fo-yes
