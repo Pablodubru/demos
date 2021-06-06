@@ -1,48 +1,50 @@
-#include "Cia402device.h"
 
-#include "SerialArduino.h"
 #include <iostream>
 #include "ToolsFControl.h"
 #include "SystemBlock.h"
+#include "imu3dmgx510.h"
 
 int main(){
     //--sensor--
-    SerialArduino tilt;
     double incSensor,oriSensor;
-    double dts=0.1;
-    sleep(4); //wait for sensor
-    SystemBlock filterSensor(0.09516,0,- 0.9048,1);
+    double pitch,roll,sumpr;
+    double dts=0.02;
+    IMU3DMGX510 imu("/dev/ttyUSB0",long(1/dts));
+//    SystemBlock filterSensor(0.09516,0,- 0.9048,1);
 
 
     SamplingTime tools;
     tools.SetSamplingTime(dts);
 
-    if (!tilt.getArduino_is_available()) return -1;
-
-    for (double t=0; t<6; t+=dts)
-    {
-        tools.WaitSamplingTime();
-        if (tilt.readSensor(incSensor,oriSensor)>=0)
-        {
-            cout << "Starting sensor " << endl;
-            break;
-        }
-    }
-    cout << "Sensor started" << endl;
 
 
-    for (double t=0;t<20;t+=dts){
+    /*for (double t=0;t<100;t+=dts){
 
-//        if (tilt.estimateSensor(incSensor,oriSensor)<0)
-        if (tilt.readSensor(incSensor,oriSensor)<0)
+        if (imu.GetPitchRoll(pitch,roll)<0)
         {
             cout << "Sensor read error !" << endl;
         }
         else
         {
-            cout << "incli_sen: " <<  (incSensor > filterSensor) << " , orient_sen: " << oriSensor << endl;
+            incSensor=(180/M_PI)*sqrt(pitch*pitch+roll*roll);
+            oriSensor = (180/M_PI)*(atan2(roll,pitch)+M_PI);
+//            oriSensor=atan2();
+            cout << "incli_sen: " <<  (incSensor ) << " , orient_sen: " << oriSensor << endl;
         }
-        cout << "Available time: " << tools.WaitSamplingTime() << endl;
+        tools.WaitSamplingTime();
+    }*/
+
+    for (double t=0;t<20;t+=dts){
+
+        if (imu.GetIncliOri(incSensor,oriSensor)<0)
+        {
+            cout << "Sensor read error !" << endl;
+        }
+        else
+        {
+            cout << "incli_sen: " <<  (incSensor ) << " , orient_sen: " << oriSensor << endl;
+        }
+        tools.WaitSamplingTime();
     }
 
 }

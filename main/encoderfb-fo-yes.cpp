@@ -26,6 +26,9 @@ int main ()
 //    sleep(4); //wait for sensor
 
   ofstream data("/home/humasoft/code/demos/graficas/encoderfb-vel-fo-i15-0o90-500g.csv",std::ofstream::out); // /home/humasoft/code/graficas
+  ofstream output_text;
+
+  output_text.open("prueba1");
 
   //Samplinfg time
   double dts=0.025;

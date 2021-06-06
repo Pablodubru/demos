@@ -6,9 +6,13 @@
 #include "math.h"
 
 #include "SerialArduino.h"
+#include "imu3dmgx510.h"
 
 #include "fcontrol.h"
 #include "IPlot.h"
+#include <chrono>
+#include <iomanip>
+#include <fstream>
 
 #include "Kinematics.h"
 
@@ -21,28 +25,30 @@
 int main ()
 {
   //--sensor--
-  SerialArduino tilt;
+//  SerialArduino tilt;
   double incSensor,oriSensor;
 //    sleep(4); //wait for sensor
 
   ofstream data("/home/humasoft/code/demos/graficas/imufb-inc-fo-i15-0o90-500g.csv",std::ofstream::out); // /home/humasoft/code/graficas
+  ofstream output_file;
+  output_file.open("prueba");
 
   //Samplinfg time
-  double dts=0.02;
+  double dts=0.018;
   SamplingTime Ts(dts);
+  IMU3DMGX510 tilt;
 
 
-
-  FPDBlock con(0,0.9636125,-0.89,dts); //(kp,kd,exp,dts) 0.0214437
+  FPDBlock con(0.5,0.9636125,-0.89,dts); //(kp,kd,exp,dts) 0.0214437
   FPDBlock reset(con); //Used for control reset
 //  PIDBlock con(0,1,0,dts);
 
  // data << "Controller PID" << " , " << " 0.1,0.05,0,dts "<< endl;
 
   //m1 setup
-  SocketCanPort pm31("can1");
+  SocketCanPort pm31("can0");
   CiA402SetupData sd31(2048,24,0.001, 0.144, 20 );
-  CiA402Device m1 (31, &pm31, &sd31);
+  CiA402Device m1 (1, &pm31, &sd31);
   m1.Reset();
   m1.SwitchOn();
   m1.SetupPositionMode(5,5);//set by start-pos
@@ -50,18 +56,18 @@ int main ()
 
 
   //m2
-  SocketCanPort pm2("can1");
+  SocketCanPort pm2("can0");
   CiA402SetupData sd32(2048,24,0.001, 0.144, 20 );
-  CiA402Device m2 (32, &pm2, &sd32);
+  CiA402Device m2 (2, &pm2, &sd32);
   m2.Reset();
   m2.SwitchOn();
   m2.SetupPositionMode(5,5);//set by start-pos
   //m2.Setup_Velocity_Mode(5);
 
   //m3
-  SocketCanPort pm3("can1");
+  SocketCanPort pm3("can0");
   CiA402SetupData sd33(2048,24,0.001, 0.144, 20 );
-  CiA402Device m3 (33, &pm3, &sd33);
+  CiA402Device m3 (3, &pm3, &sd33);
   m3.Reset();
   m3.SwitchOn();
   m3.SetupPositionMode(5,5);//set by start-pos
@@ -96,7 +102,7 @@ int main ()
   //tilt initialization
   for (double t=0; t<6; t+=dts)
   {
-  if (tilt.readSensor(incSensor,oriSensor)>=0)
+  if (tilt.GetIncliOri(incSensor,oriSensor)>=0)
   {
       cout << "Sensor ready" << endl<< endl;
       break;
@@ -111,11 +117,19 @@ int main ()
       double interval=5; //in seconds
       for (double t=0;t<interval; t+=dts)
       {
-          if (tilt.readSensor(incSensor,oriSensor) <0)
+
+         // std::chrono::system_clock::time_point start = std::chrono::system_clock::now();
+
+          if (tilt.GetIncliOri(incSensor,oriSensor) <0)
           {
               cout << "Sensor error! " << endl;
 
           }
+
+//          std::chrono::system_clock::time_point finish = std::chrono::system_clock::now();
+//          std::chrono::nanoseconds elapsedNanoseconds = finish.time_since_epoch() - start.time_since_epoch();
+
+          //std::chrono::system_clock::time_point start = std::chrono::system_clock::now();
 
 
           //negative feedback
@@ -130,6 +144,7 @@ int main ()
 
           if (!isnormal(cs)) cs = 0;
 
+          std::chrono::system_clock::time_point start = std::chrono::system_clock::now();
 
           neck_ik.GetIK(cs,ori,lengths);
           cs1=(lg0-lengths[0])/radius;
@@ -142,7 +157,14 @@ int main ()
 //          cout << "cs1 " << cs1 << ", cs2 " << cs2 << ", cs3 " << cs3 <<endl;
           data <<t<<" , "<<inc<<" , "<<incSensor<<" , "<<ori<<" , " << oriSensor<<" , " <<ierror<<" , "<<cs1<<" , "<<cs2<<" , " <<cs3<<" , " <<m1.GetPosition()<<" , " <<m2.GetPosition()<<" , " <<m3.GetPosition()<< endl;
 
-          Ts.WaitSamplingTime();
+          std::chrono::system_clock::time_point finish = std::chrono::system_clock::now();
+          std::chrono::nanoseconds elapsedNanoseconds = finish.time_since_epoch() - start.time_since_epoch();
+
+          double elapsedTime = elapsedNanoseconds.count();
+
+          cout << elapsedTime/1000000 << endl;
+          output_file << elapsedTime/1000000 << endl;
+          cout << Ts.WaitSamplingTime() << endl;
       }
 
       con = FPDBlock(reset); //Reset?
@@ -159,6 +181,7 @@ int main ()
   sleep(4);
 
   data.close();
+  output_file.close();
 
 
 
